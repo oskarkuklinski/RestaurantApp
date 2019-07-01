@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableHighlight } from 'react-native';
 
 export default class WelcomePage extends React.Component {
 
@@ -28,12 +28,12 @@ export default class WelcomePage extends React.Component {
                         }
                     ]}
                     renderItem={({item}) =>
-                        <View>
+                        <TouchableHighlight>
                             <Text 
                                 onPress={() => this.props.navigation.navigate("Main")}
                                 style={styles.language}>{item.key}
                             </Text>
-                        </View>}>
+                        </TouchableHighlight>}>
                 </FlatList>
             </View>
         );

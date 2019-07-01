@@ -25,7 +25,6 @@ export default class PickTablePage extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>{this.state.number}</Text>
                 <Text style={styles.title}>Pick a table number:</Text>
                 <TextInput
                     keyboardType='numeric'
