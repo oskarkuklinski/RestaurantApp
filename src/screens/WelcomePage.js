@@ -7,7 +7,8 @@ export default class WelcomePage extends React.Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>Hello!</Text>
-                <Text>Choose your language</Text>
+                <Text style={styles.pickLanguage}>Choose your language</Text>
+                <View style={styles.viewLanguage}></View>
                 <FlatList
                     data={[
                         {
@@ -48,12 +49,39 @@ const styles = StyleSheet.create({
         flex: 1, 
         alignItems: "center", 
         justifyContent: "center",
+        backgroundColor: '#F27F3D',
     },
+
     title: {
-        fontSize: 26
+        fontSize: 54,
+        color:'#F2E1AE',
+        marginTop:86,
+    },
+    viewLanguage:{
+        margin:20,
+        width:309,
+        height:52,
+        backgroundColor:'#F2E1AE',
+        opacity: 0.2,
+        borderRadius:13,
+        
+    },
+    pickLanguage:{
+        position:'relative',
+        top:"11%",
+        left:'-10%',
+        fontSize:18,
+        lineHeight:52,
+        opacity:1,
+        color:"#fff",
+        marginLeft:15,
+
     },
     language: {
         padding: 10,
         fontSize: 18,
+        color: '#fff',
+        borderWidth: 3,
+        borderColor:'#F2E1AE',
     }
 });
