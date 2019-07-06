@@ -154,7 +154,7 @@ export default class FoodMenuPage extends React.Component {
 
 const styles = StyleSheet.create({
     item: {
-        padding: 6
+        padding: 8
     },
     container: {
         flex: 1, 
