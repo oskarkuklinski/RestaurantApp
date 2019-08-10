@@ -27,6 +27,7 @@ export default class PickTablePage extends React.Component {
             <View style={styles.container}>
                 <Text style={styles.title}>Pick a table number:</Text>
                 <TextInput
+                    style={styles.input}
                     keyboardType='numeric'
                     onChangeText={(text) => this.onChanged(text)}
                     value={this.state.number}
@@ -46,6 +47,13 @@ const styles = StyleSheet.create({
         flex: 1, 
         alignItems: "center", 
         justifyContent: "center",
+    },
+    input: {
+        borderBottomColor: "grey",
+        borderBottomWidth: 1,
+        height: 32,
+        width: 32,
+        margin: 6,
     },
     title: {
         fontSize: 26
