@@ -169,7 +169,7 @@ export default class FoodMenuPage extends React.Component {
         // Initial states
         this.state = {
             basket: 0,
-            basketItems: ["test", "test2"],
+            basketItems: [],
             items: testData,
             number: this.props.navigation.state.params.data,
         }
@@ -178,7 +178,18 @@ export default class FoodMenuPage extends React.Component {
     }
     addToBasket(item) {
         let itemsInBasket = this.state.basketItems;
-        itemsInBasket.push(item);
+        // increase quantity of repeating object
+        if (itemsInBasket.includes(item)) {
+            for (let i = 0; i < itemsInBasket.length; i++) {
+                if (itemsInBasket[i].name === item.name) {
+                    itemsInBasket[i].quantity += 1;
+                }
+            }
+        } else {
+            // add quantity property to the object in the basket
+            itemsInBasket.push(item); 
+            itemsInBasket[itemsInBasket.length - 1].quantity = 1;
+        }
         this.setState({
             basket: this.state.basket + 1,
             basketItems: itemsInBasket,
