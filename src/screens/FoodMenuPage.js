@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { connect } from 'react-redux';
 
 /*
 FoodMenuPage component structure
@@ -48,10 +49,10 @@ class Header extends React.Component {
             <View
                 style={styles.header}>
                 <Text>ORDER</Text>
-                <Text>Table no. {this.props.number}</Text>
+                <Text>Table no. {this.props.table}</Text>
                 <TouchableOpacity
                     style={styles.basket}
-                    onPress={() => this.props.navigate('OrderSummary', { basketItems: this.props.basketItems, number: this.props.number })}>
+                    onPress={() => this.props.navigate('OrderSummary', { basketItems: this.props.basketItems, number: this.props.number, basket: this.props.basket })}>
                     <Icon
                         name='shopping-cart'
                         color="#F2E1AE"
@@ -163,19 +164,20 @@ class Item extends React.Component {
 }
 
 // -------------------- MAIN COMPONENT -------------------------
-export default class FoodMenuPage extends React.Component {
+class FoodMenuPage extends React.Component {
     constructor(props) {
         super(props);
         // Initial states
         this.state = {
-            basket: 0,
+            basket: this.props.navigation.getParam('basket', 0),
             basketItems: [],
             items: testData,
-            number: this.props.navigation.state.params.data,
+            table: this.props.table,
         }
         // Bind the function to the component
         this.addToBasket = this.addToBasket.bind(this)
     }
+    
     addToBasket(item) {
         let itemsInBasket = this.state.basketItems;
         // increase quantity of repeating object
@@ -186,22 +188,25 @@ export default class FoodMenuPage extends React.Component {
                 }
             }
         } else {
-            // add quantity property to the object in the basket
+            // add quantity and index value to the object in the basket
             itemsInBasket.push(item); 
             itemsInBasket[itemsInBasket.length - 1].quantity = 1;
+            itemsInBasket[itemsInBasket.length - 1].index = itemsInBasket.length - 1;
         }
         this.setState({
             basket: this.state.basket + 1,
             basketItems: itemsInBasket,
         });
     }
+    
     render() {
+        console.log(this.props);
         return (
             <View style={styles.container}>
                 <Header 
                     basket={this.state.basket} 
                     basketItems={this.state.basketItems}
-                    number={this.state.number} 
+                    table={this.state.table} 
                     // navigation prop reference to navigate to the summary page
                     navigate={this.props.navigation.navigate}/>
                 <Text>Search the menu</Text>
@@ -211,6 +216,13 @@ export default class FoodMenuPage extends React.Component {
                     basketItems={this.state.basketItems}/>
             </View>
         );
+    }
+}
+
+// Select data that from the store (redux) that component needs
+function mapStateToProps(state){
+    return {
+        table: state.table.table,
     }
 }
 
@@ -241,3 +253,6 @@ const styles = StyleSheet.create({
         fontSize: 26
     },
 });
+
+// Connect redux store with react component and export it
+export default connect(mapStateToProps)(FoodMenuPage);

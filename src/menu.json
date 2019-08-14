@@ -1,0 +1,29 @@
+{
+    "menu": [
+        {
+            "id": 0, 
+            "name": 'Promotions and Deals',
+            "contents": [ 
+                { "name": 'Family Deal', "price": 20, "desc": 'Family sharing deal including 20 spicy wings, 3 soft drinks and starter of your choice' },
+                { "name": 'Pizza Club', "price": 8 ,"desc": 'Pizza of your choice with a soft drink or a beer inlcuded' },
+                { "name": 'Sharing Platter', "price": 25, "desc": 'A whole chicken with two sides of your choice and two soft drinks' }
+            ]
+        },
+        {
+            "id": 1,
+            "name": 'Drinks and Spirits',
+            "contents": [ 
+                { "name": 'Soft Drink', "price": 4, "desc": 'coca-cola classic, coca-cola zero, coca-cola light, sprite, fanta' },
+                { "name": 'Beer', "price": 5, "desc": 'Peroni, Carlsberg, Stella, Guinness' },
+            ]
+        },
+        {
+            "id": 2,
+            "name": 'Starters',
+            "contents": [ 
+                { "name": 'Chicken Wings', "price": 5, "desc": '3 chicken wings with a baste of your choice' },
+                { "name": 'Olives', "price": 4, "desc": 'Small portion of olives to start your evening' },
+            ]
+        }
+    ]
+}
