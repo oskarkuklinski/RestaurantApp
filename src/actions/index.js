@@ -8,16 +8,9 @@ export const changeTableNumber = (number) => {
     }
 };
 
-export const addBasketItem = (quantity, item) => {
+export const modifyBasket = (basket) => {
     return {
-        type: actionType.ADD_BASKET_ITEM,
-        payload: {quantity: quantity, item: item}
-    }
-};
-
-export const subtractBasketItem = (quantity, item) => {
-    return {
-        type: actionType.SUBTRACT_BASKET_ITEM,
-        payload: {quantity: quantity, item: item}
+        type: actionType.MODIFY_BASKET,
+        payload: basket,
     }
 };

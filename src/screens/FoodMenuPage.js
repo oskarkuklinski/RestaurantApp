@@ -45,6 +45,7 @@ const testData = [
 // ---------- HEADER --------------------------
 class Header extends React.Component {
     render() {
+        console.log(this.props.basket);
         return (
             <View
                 style={styles.header}>
@@ -52,13 +53,13 @@ class Header extends React.Component {
                 <Text>Table no. {this.props.table}</Text>
                 <TouchableOpacity
                     style={styles.basket}
-                    onPress={() => this.props.navigate('OrderSummary', { basketItems: this.props.basketItems, number: this.props.number, basket: this.props.basket })}>
+                    onPress={() => this.props.navigate('OrderSummary')}>
                     <Icon
                         name='shopping-cart'
                         color="#F2E1AE"
                         style={styles.basketIcon}>
                     </Icon>
-                    <Text>({this.props.basket})</Text>
+                    <Text>({this.props.basket.numberOfItems})</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -77,7 +78,6 @@ class Menu extends React.Component {
         return (
             <View>
                 {items}
-                <Text>Test: {this.props.basketItems}</Text>
             </View>
         );
     }
@@ -169,8 +169,10 @@ class FoodMenuPage extends React.Component {
         super(props);
         // Initial states
         this.state = {
-            basket: this.props.navigation.getParam('basket', 0),
-            basketItems: [],
+            basket: {
+                numberOfItems: this.props.basket.numberOfItems,
+                items: this.props.basket.items,
+            },
             items: testData,
             table: this.props.table,
         }
@@ -179,7 +181,7 @@ class FoodMenuPage extends React.Component {
     }
     
     addToBasket(item) {
-        let itemsInBasket = this.state.basketItems;
+        let itemsInBasket = this.state.basket.items;
         // increase quantity of repeating object
         if (itemsInBasket.includes(item)) {
             for (let i = 0; i < itemsInBasket.length; i++) {
@@ -194,18 +196,22 @@ class FoodMenuPage extends React.Component {
             itemsInBasket[itemsInBasket.length - 1].index = itemsInBasket.length - 1;
         }
         this.setState({
-            basket: this.state.basket + 1,
-            basketItems: itemsInBasket,
+            basket: {
+                numberOfItems: this.state.basket.numberOfItems += 1,
+                items: itemsInBasket,
+            }
+        });
+        this.props.dispatch({
+            type: 'MODIFY_BASKET',
+            payload: this.state.basket,
         });
     }
     
     render() {
-        console.log(this.props);
         return (
             <View style={styles.container}>
                 <Header 
                     basket={this.state.basket} 
-                    basketItems={this.state.basketItems}
                     table={this.state.table} 
                     // navigation prop reference to navigate to the summary page
                     navigate={this.props.navigation.navigate}/>
@@ -219,10 +225,11 @@ class FoodMenuPage extends React.Component {
     }
 }
 
-// Select data that from the store (redux) that component needs
+// Select data from the store (redux) that component needs
 function mapStateToProps(state){
     return {
         table: state.table.table,
+        basket: state.basket,
     }
 }
 

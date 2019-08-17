@@ -6,7 +6,11 @@ import { changeTableNumber } from '../actions/index';
 class PickTablePage extends React.Component {
     // Initial states
     state = {
-        table: null
+        table: null,
+        basket: {
+            numberOfItems: this.props.basket.numberOfItems,
+            items: this.props.basket.items,
+        },
     }
     
     // Validate only numbers as input values
@@ -42,7 +46,6 @@ class PickTablePage extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>Pick a table number:</Text>
@@ -66,6 +69,7 @@ class PickTablePage extends React.Component {
 function mapStateToProps(state){
     return {
         table: state.table.table,
+        basket: state.basket
     }
 }
 

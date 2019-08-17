@@ -6,12 +6,10 @@ const initialState = {
 };
 
 const basketReducer = (state = initialState, action) => {
-    let newState;
     switch (action.type) {
-        case actionType.ADD_BASKET_ITEM:
-            return newState = state + action.payload;
-        case actionType.SUBTRACT_BASKET_ITEM:
-            return newState = state - action.payload;
+        case actionType.MODIFY_BASKET:
+            const basket = action.payload;
+            return basket;
         default:
             return state
     }

@@ -9,7 +9,8 @@ class Header extends React.Component {
         return (
             <View
                 style={styles.header}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => this.props.navigate('FoodMenu')}>
                     <Icon
                         name='arrow-left'
                         color="#F2E1AE">
@@ -25,11 +26,14 @@ class Header extends React.Component {
 // ---------- SUMMARY --------------------------
 class Summary extends React.Component {
     render() {
-        let basketItems = this.props.basketItems.map((item, index) => {
+        let basketItems = this.props.basket.items.map((item, index) => {
             return <BasketItem 
                        key={index}
                        item={item}
-                       removeFromBasket={this.props.removeFromBasket}/>
+                       basket={this.props.basket}
+                       removeFromBasket={this.props.removeFromBasket}
+                       addQuantity={this.props.addQuantity} 
+                       subtractQuantity={this.props.subtractQuantity} />
         });
         return (
             <View style={styles.summary}>
@@ -43,32 +47,23 @@ class Summary extends React.Component {
 class BasketItem extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            // making state here allows for changes in the basketItems quantity later
-            quantity: this.props.item.quantity,
-        }
         this.handleRemoveFromBasket = this.handleRemoveFromBasket.bind(this);
-    }
-    
-    // only numbers can be entered to the input
-    onChanged(text){
-        let newText = '';
-        let numbers = '0123456789';
-
-        for (var i=0; i < text.length; i++) {
-            if(numbers.indexOf(text[i]) > -1 ) {
-                newText = newText + text[i];
-            }
-            else {
-                // call back function
-                alert("please enter numbers only");
-            }
-        }
-        this.setState({ quantity: newText });
+        this.handleAddQuantity = this.handleAddQuantity.bind(this);
+        this.handleSubtractQuantity = this.handleSubtractQuantity.bind(this);
     }
     
     handleRemoveFromBasket(e) {
         this.props.removeFromBasket(this.props.item);
+    }
+    handleAddQuantity(e) {
+        this.props.addQuantity(this.props.item);
+    }
+    handleSubtractQuantity(e) {
+        if (this.props.item.quantity >= 2) {
+            this.props.subtractQuantity(this.props.item);
+        } else {
+            alert("Press x to remove the product from basket");
+        }
     }
     
     render() {
@@ -78,28 +73,22 @@ class BasketItem extends React.Component {
                 <Text style={styles.name}>{this.props.item.name}</Text>
                 <View style={styles.quantity}>
                     <TouchableOpacity
-                        onPress={() => (this.state.quantity >= 2) ? this.setState({ quantity: this.state.quantity -= 1}) : alert("Press x to remove the product from basket")}>
+                        onPress={this.handleSubtractQuantity}>
                         <Icon
                             name='minus'
                             color="#F2E1AE">
                         </Icon>
                     </TouchableOpacity>
-                    <TextInput
-                        style={styles.input}
-                        keyboardType='numeric'
-                        onChangeText={(text) => this.onChanged(text)}
-                        value={this.state.quantity.toString()}
-                        maxLength={2}>
-                    </TextInput>
+                    <Text>{this.props.item.quantity}</Text>
                     <TouchableOpacity
-                        onPress={() => this.setState({ quantity: this.state.quantity += 1})}>
+                        onPress={this.handleAddQuantity}>
                         <Icon
                             name='plus'
                             color="#F2E1AE">
                         </Icon>
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.price}>{this.props.item.price * this.state.quantity} £</Text>
+                <Text style={styles.price}>{this.props.item.price * this.props.item.quantity} £</Text>
                 <TouchableOpacity 
                     style={styles.remove}
                     onPress={this.handleRemoveFromBasket}>
@@ -119,20 +108,63 @@ class OrderSummaryPage extends React.Component {
         super(props);
         this.state = {
             table: this.props.table,
-            basketItems: this.props.navigation.state.params.basketItems,
-            basket: this.props.navigation.state.params.basket,
+            basket: {
+                numberOfItems: this.props.basket.numberOfItems,
+                items: this.props.basket.items,
+            },
         }
         this.removeFromBasket = this.removeFromBasket.bind(this);
+        this.addQuantity = this.addQuantity.bind(this);
+        this.subtractQuantity = this.subtractQuantity.bind(this);
     }
     
     // Remove an item from the basket
     removeFromBasket(item) { 
-        let itemsInBasket = this.state.basketItems;
-        itemsInBasket.splice(item.index, 1);
+        let newBasket = this.state.basket;
+        newBasket.items.splice(item.index, 1);
+        newBasket.numberOfItems -= item.quantity;
         this.setState({
-            basketItems: itemsInBasket,
-            basket: this.state.basket - item.quantity,
+            basket: {
+                numberOfItems: newBasket.numberOfItems,
+                items: newBasket.items,
+            }
         });
+        this.props.dispatch({
+            type: "MODIFY_BASKET",
+            payload: this.state.basket,
+        })
+    }
+    
+    addQuantity(item) {
+        let newBasket = this.state.basket;
+        newBasket.items[item.index].quantity += 1;
+        newBasket.numberOfItems += 1;
+        this.setState({
+            basket: {
+                numberOfItems: newBasket.numberOfItems,
+                items: newBasket.items,
+            }
+        });
+        this.props.dispatch({
+            type: 'MODIFY_BASKET',
+            payload: this.state.basket,
+        })
+    }
+    
+    subtractQuantity(item) {
+        let newBasket = this.state.basket;
+        newBasket.items[item.index].quantity -= 1;
+        newBasket.numberOfItems -= 1;
+        this.setState({
+            basket: {
+                numberOfItems: newBasket.numberOfItems,
+                items: newBasket.items,
+            }
+        });
+        this.props.dispatch({
+            type: 'MODIFY_BASKET',
+            payload: this.state.basket,
+        })
     }
     
     render() {
@@ -140,10 +172,13 @@ class OrderSummaryPage extends React.Component {
             <View style={styles.container}>
                 <Header
                     table={this.state.table}
-                    basket={this.state.basket} />
+                    numberOfItems={this.state.basket.numberOfItems} 
+                    navigate={this.props.navigation.navigate} />
                 <Summary
-                    basketItems={this.state.basketItems}
-                    removeFromBasket={this.removeFromBasket} />
+                    basket={this.state.basket}
+                    removeFromBasket={this.removeFromBasket}
+                    addQuantity={this.addQuantity}
+                    subtractQuantity={this.subtractQuantity} />
             </View>
         );
     }
@@ -153,6 +188,7 @@ class OrderSummaryPage extends React.Component {
 function mapStateToProps(state){
     return {
         table: state.table.table,
+        basket: state.basket,
     }
 }
 
