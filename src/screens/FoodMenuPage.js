@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import MainStyles from '../Styles';
 import { connect } from 'react-redux';
 
 /*
@@ -206,7 +207,7 @@ class FoodMenuPage extends React.Component {
     
     render() {
         return (
-            <View style={styles.container}>
+            <View style={MainStyles.container}>
                 <Header 
                     basket={this.props.basket} 
                     table={this.props.table} 

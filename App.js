@@ -9,6 +9,16 @@ import MainMenu from './src/screens/MainMenu';
 import PickTablePage from './src/screens/PickTablePage';
 import FoodMenuPage from './src/screens/FoodMenuPage';
 import OrderSummaryPage from './src/screens/OrderSummaryPage';
+// import Fonts as Font from 'expo-font';
+
+// export default class App extends React.Component {
+//   componentDidMount() {
+//     Font.loadAsync({
+//       'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+//     });
+//   }
+// }
+
 
 // Navigator with screens
 const AppNavigator = createStackNavigator(

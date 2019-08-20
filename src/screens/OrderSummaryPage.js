@@ -1,4 +1,6 @@
 import React from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import MainStyles from '../Styles';
 import { StyleSheet, Text, View, Button, TouchableOpacity, TextInput, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
@@ -144,6 +146,9 @@ class OrderSummaryPage extends React.Component {
     
     render() {
         return (
+            <View style={MainStyles.container}>
+                <Text>Table no. {this.state.number}</Text>
+                <Text>{this.state.basketItems.toString()}</Text>
             <View style={styles.container}>
                 <Header
                     table={this.state.table}
