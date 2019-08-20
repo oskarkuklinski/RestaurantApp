@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MainStyles from '../Styles';
+import { connect } from 'react-redux';
 
 /*
 FoodMenuPage component structure
@@ -44,21 +45,25 @@ const testData = [
 
 // ---------- HEADER --------------------------
 class Header extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    
     render() {
         return (
             <View
                 style={styles.header}>
                 <Text>ORDER</Text>
-                <Text>Table no. {this.props.number}</Text>
+                <Text>Table no. {this.props.table}</Text>
                 <TouchableOpacity
                     style={styles.basket}
-                    onPress={() => this.props.navigate('OrderSummary', { basketItems: this.props.basketItems, number: this.props.number })}>
+                    onPress={() => this.props.navigate('OrderSummary')}>
                     <Icon
                         name='shopping-cart'
                         color="#F2E1AE"
                         style={styles.basketIcon}>
                     </Icon>
-                    <Text>({this.props.basket})</Text>
+                    <Text>({this.props.basket.numberOfItems})</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -77,7 +82,6 @@ class Menu extends React.Component {
         return (
             <View>
                 {items}
-                <Text>Test: {this.props.basketItems}</Text>
             </View>
         );
     }
@@ -164,36 +168,51 @@ class Item extends React.Component {
 }
 
 // -------------------- MAIN COMPONENT -------------------------
-export default class FoodMenuPage extends React.Component {
+class FoodMenuPage extends React.Component {
     constructor(props) {
         super(props);
         // Initial states
         this.state = {
-            basket: 0,
-            basketItems: ["test", "test2"],
+            basket: {
+                numberOfItems: this.props.basket.numberOfItems,
+                items: this.props.basket.items,
+            },
             items: testData,
-            number: this.props.navigation.state.params.data,
+            table: this.props.table,
         }
         // Bind the function to the component
         this.addToBasket = this.addToBasket.bind(this)
     }
+    
     addToBasket(item) {
-        let itemsInBasket = this.state.basketItems;
-        itemsInBasket.push(item);
-        this.setState({
-            basket: this.state.basket + 1,
-            basketItems: itemsInBasket,
-        });
+        let newItem = item;
+        // increase quantity of repeating object
+        if (this.props.basket.items.includes(item)) {
+            this.props.dispatch({
+                type: 'INCREASE_QUANTITY',
+                payload: this.state.basket,
+                item: item,
+            });
+        }  else {
+            // add quantity and index value to the object in the basket
+            newItem.quantity = 1;
+            newItem.index = this.props.basket.items.length;
+            this.props.dispatch({
+                type: 'ADD_TO_BASKET',
+                payload: this.state.basket,
+                item: newItem,
+            });
+        }
     }
+    
     render() {
         return (
             <View style={MainStyles.container}>
                 <Header 
-                    basket={this.state.basket} 
-                    basketItems={this.state.basketItems}
-                    number={this.state.number} 
+                    basket={this.props.basket} 
+                    table={this.props.table} 
                     // navigation prop reference to navigate to the summary page
-                    navigate={this.props.navigation.navigate}/>
+                    navigate={this.props.navigation.navigate} />
                 <Text>Search the menu</Text>
                 <Menu 
                     items={this.state.items}
@@ -201,6 +220,14 @@ export default class FoodMenuPage extends React.Component {
                     basketItems={this.state.basketItems}/>
             </View>
         );
+    }
+}
+
+// Select data from the store (redux) that component needs
+function mapStateToProps(state){
+    return {
+        table: state.table.table,
+        basket: state.basket,
     }
 }
 
@@ -231,3 +258,6 @@ const styles = StyleSheet.create({
         fontSize: 26
     },
 });
+
+// Connect redux store with react component and export it
+export default connect(mapStateToProps)(FoodMenuPage);
