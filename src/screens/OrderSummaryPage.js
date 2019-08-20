@@ -32,8 +32,8 @@ class Summary extends React.Component {
                        item={item}
                        basket={this.props.basket}
                        removeFromBasket={this.props.removeFromBasket}
-                       addQuantity={this.props.addQuantity} 
-                       subtractQuantity={this.props.subtractQuantity} />
+                       increaseQuantity={this.props.increaseQuantity} 
+                       decreaseQuantity={this.props.decreaseQuantity} />
         });
         return (
             <View style={styles.summary}>
@@ -48,19 +48,19 @@ class BasketItem extends React.Component {
     constructor(props) {
         super(props);
         this.handleRemoveFromBasket = this.handleRemoveFromBasket.bind(this);
-        this.handleAddQuantity = this.handleAddQuantity.bind(this);
-        this.handleSubtractQuantity = this.handleSubtractQuantity.bind(this);
+        this.handleIncreaseQuantity = this.handleIncreaseQuantity.bind(this);
+        this.handleDecreaseQuantity = this.handleDecreaseQuantity.bind(this);
     }
     
     handleRemoveFromBasket(e) {
         this.props.removeFromBasket(this.props.item);
     }
-    handleAddQuantity(e) {
-        this.props.addQuantity(this.props.item);
+    handleIncreaseQuantity(e) {
+        this.props.increaseQuantity(this.props.item);
     }
-    handleSubtractQuantity(e) {
-        if (this.props.item.quantity >= 2) {
-            this.props.subtractQuantity(this.props.item);
+    handleDecreaseQuantity(e) {
+        if (this.props.item.quantity > 1) {
+            this.props.decreaseQuantity(this.props.item);
         } else {
             alert("Press x to remove the product from basket");
         }
@@ -73,7 +73,7 @@ class BasketItem extends React.Component {
                 <Text style={styles.name}>{this.props.item.name}</Text>
                 <View style={styles.quantity}>
                     <TouchableOpacity
-                        onPress={this.handleSubtractQuantity}>
+                        onPress={this.handleDecreaseQuantity}>
                         <Icon
                             name='minus'
                             color="#F2E1AE">
@@ -81,7 +81,7 @@ class BasketItem extends React.Component {
                     </TouchableOpacity>
                     <Text>{this.props.item.quantity}</Text>
                     <TouchableOpacity
-                        onPress={this.handleAddQuantity}>
+                        onPress={this.handleIncreaseQuantity}>
                         <Icon
                             name='plus'
                             color="#F2E1AE">
@@ -114,56 +114,31 @@ class OrderSummaryPage extends React.Component {
             },
         }
         this.removeFromBasket = this.removeFromBasket.bind(this);
-        this.addQuantity = this.addQuantity.bind(this);
-        this.subtractQuantity = this.subtractQuantity.bind(this);
+        this.increaseQuantity = this.increaseQuantity.bind(this);
+        this.decreaseQuantity = this.decreaseQuantity.bind(this);
     }
     
-    // Remove an item from the basket
     removeFromBasket(item) { 
-        let newBasket = this.state.basket;
-        newBasket.items.splice(item.index, 1);
-        newBasket.numberOfItems -= item.quantity;
-        this.setState({
-            basket: {
-                numberOfItems: newBasket.numberOfItems,
-                items: newBasket.items,
-            }
-        });
         this.props.dispatch({
-            type: "MODIFY_BASKET",
+            type: "REMOVE_FROM_BASKET",
             payload: this.state.basket,
+            item: item,
         })
     }
     
-    addQuantity(item) {
-        let newBasket = this.state.basket;
-        newBasket.items[item.index].quantity += 1;
-        newBasket.numberOfItems += 1;
-        this.setState({
-            basket: {
-                numberOfItems: newBasket.numberOfItems,
-                items: newBasket.items,
-            }
-        });
+    increaseQuantity(item) {
         this.props.dispatch({
-            type: 'MODIFY_BASKET',
+            type: 'INCREASE_QUANTITY',
             payload: this.state.basket,
+            item: item,
         })
     }
     
-    subtractQuantity(item) {
-        let newBasket = this.state.basket;
-        newBasket.items[item.index].quantity -= 1;
-        newBasket.numberOfItems -= 1;
-        this.setState({
-            basket: {
-                numberOfItems: newBasket.numberOfItems,
-                items: newBasket.items,
-            }
-        });
+    decreaseQuantity(item) {
         this.props.dispatch({
-            type: 'MODIFY_BASKET',
+            type: 'DECREASE_QUANTITY',
             payload: this.state.basket,
+            item: item,
         })
     }
     
@@ -172,13 +147,14 @@ class OrderSummaryPage extends React.Component {
             <View style={styles.container}>
                 <Header
                     table={this.state.table}
-                    numberOfItems={this.state.basket.numberOfItems} 
-                    navigate={this.props.navigation.navigate} />
+                    numberOfItems={this.props.basket.numberOfItems} 
+                    navigate={this.props.navigation.navigate} 
+                    basket={this.props.basket} />
                 <Summary
-                    basket={this.state.basket}
+                    basket={this.props.basket}
                     removeFromBasket={this.removeFromBasket}
-                    addQuantity={this.addQuantity}
-                    subtractQuantity={this.subtractQuantity} />
+                    increaseQuantity={this.increaseQuantity}
+                    decreaseQuantity={this.decreaseQuantity} />
             </View>
         );
     }

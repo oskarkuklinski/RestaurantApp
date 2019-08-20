@@ -44,8 +44,11 @@ const testData = [
 
 // ---------- HEADER --------------------------
 class Header extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    
     render() {
-        console.log(this.props.basket);
         return (
             <View
                 style={styles.header}>
@@ -181,40 +184,34 @@ class FoodMenuPage extends React.Component {
     }
     
     addToBasket(item) {
-        let itemsInBasket = this.state.basket.items;
+        let newItem = item;
         // increase quantity of repeating object
-        if (itemsInBasket.includes(item)) {
-            for (let i = 0; i < itemsInBasket.length; i++) {
-                if (itemsInBasket[i].name === item.name) {
-                    itemsInBasket[i].quantity += 1;
-                }
-            }
-        } else {
+        if (this.props.basket.items.includes(item)) {
+            this.props.dispatch({
+                type: 'INCREASE_QUANTITY',
+                payload: this.state.basket,
+                item: item,
+            });
+        }  else {
             // add quantity and index value to the object in the basket
-            itemsInBasket.push(item); 
-            itemsInBasket[itemsInBasket.length - 1].quantity = 1;
-            itemsInBasket[itemsInBasket.length - 1].index = itemsInBasket.length - 1;
+            newItem.quantity = 1;
+            newItem.index = this.props.basket.items.length;
+            this.props.dispatch({
+                type: 'ADD_TO_BASKET',
+                payload: this.state.basket,
+                item: newItem,
+            });
         }
-        this.setState({
-            basket: {
-                numberOfItems: this.state.basket.numberOfItems += 1,
-                items: itemsInBasket,
-            }
-        });
-        this.props.dispatch({
-            type: 'MODIFY_BASKET',
-            payload: this.state.basket,
-        });
     }
     
     render() {
         return (
             <View style={styles.container}>
                 <Header 
-                    basket={this.state.basket} 
-                    table={this.state.table} 
+                    basket={this.props.basket} 
+                    table={this.props.table} 
                     // navigation prop reference to navigate to the summary page
-                    navigate={this.props.navigation.navigate}/>
+                    navigate={this.props.navigation.navigate} />
                 <Text>Search the menu</Text>
                 <Menu 
                     items={this.state.items}

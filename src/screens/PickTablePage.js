@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux';
-import { changeTableNumber } from '../actions/index';
 
 class PickTablePage extends React.Component {
     // Initial states

@@ -4,7 +4,7 @@ import tableReducer from './tableReducer';
 
 const restaurantApp = combineReducers({
     basketReducer,
-    tableReducer
+    tableReducer,
 })
 
 export default restaurantApp
