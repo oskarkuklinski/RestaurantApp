@@ -1,12 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableHighlight } from 'react-native';
+import MainStyles from '../Styles';
 
 export default class WelcomePage extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={styles.title}>Hello!</Text>
+            <View style={MainStyles.container}>
+                <Text style={MainStyles.title}>Hello!</Text>
                 <Text style={styles.pickLanguage}>Choose your language</Text>
                 <View style={styles.viewLanguage}></View>
                 <FlatList
@@ -53,9 +54,13 @@ const styles = StyleSheet.create({
     },
 
     title: {
-        fontSize: 54,
+        fontSize: 51,
         color:'#F2E1AE',
         marginTop:86,
+        textAlign:'center',
+        borderWidth:1,
+        borderStyle:'solid',
+        borderColor:'black',
     },
     viewLanguage:{
         margin:20,
@@ -70,6 +75,7 @@ const styles = StyleSheet.create({
         position:'relative',
         top:"11%",
         left:'-10%',
+        width:'80%',
         fontSize:18,
         lineHeight:52,
         opacity:1,
@@ -78,7 +84,7 @@ const styles = StyleSheet.create({
 
     },
     language: {
-        padding: 10,
+        padding: 20,
         fontSize: 18,
         color: '#fff',
         borderWidth: 3,

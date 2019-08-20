@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import MainStyles from '../Styles';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class PickTablePage extends React.Component {
     state = {
@@ -24,8 +26,8 @@ export default class PickTablePage extends React.Component {
     
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={styles.title}>Pick a table number:</Text>
+            <View style={MainStyles.container}>
+                <Text style={MainStyles.title}>Pick a table number:</Text>
                 <TextInput
                     style={styles.input}
                     keyboardType='numeric'
@@ -33,10 +35,11 @@ export default class PickTablePage extends React.Component {
                     value={this.state.number}
                     maxLength={2}>
                 </TextInput>
-                <Button
-                    title="Next"
-                    onPress={() => this.props.navigation.navigate('FoodMenu', { data: this.state.number })}>
-                </Button>
+                <TouchableOpacity 
+                style={MainStyles.buttons} 
+                onPress={() => this.props.navigation.navigate('FoodMenu', { data: this.state.number })}>
+              <Text style={MainStyles.text}>Next</Text>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -49,11 +52,15 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     input: {
-        borderBottomColor: "grey",
-        borderBottomWidth: 1,
-        height: 32,
-        width: 32,
+        backgroundColor:'#F2E1AE',
+        fontSize:40,
+        borderRadius:14,
+        // borderBottomColor: "grey",
+        // borderBottomWidth: 1,
+        height: 100,
+        width: 100,
         margin: 6,
+        textAlign:'center',
     },
     title: {
         fontSize: 26

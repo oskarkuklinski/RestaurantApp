@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
+import MainStyles from '../Styles';
 
 export default class OrderSummaryPage extends React.Component {
     constructor(props) {
@@ -11,7 +12,7 @@ export default class OrderSummaryPage extends React.Component {
     }
     render() {
         return (
-            <View style={styles.container}>
+            <View style={MainStyles.container}>
                 <Text>Table no. {this.state.number}</Text>
                 <Text>{this.state.basketItems.toString()}</Text>
             </View>
