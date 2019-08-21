@@ -187,11 +187,11 @@ class FoodMenuPage extends React.Component {
     addToBasket(item) {
         let newItem = item;
         // increase quantity of repeating object
-        if (this.props.basket.items.includes(item)) {
+        if (this.props.basket.items[newItem.index]) {
             this.props.dispatch({
                 type: 'INCREASE_QUANTITY',
                 payload: this.state.basket,
-                item: item,
+                item: newItem,
             });
         }  else {
             // add quantity and index value to the object in the basket
@@ -206,6 +206,7 @@ class FoodMenuPage extends React.Component {
     }
     
     render() {
+        console.log(this.props.basket);
         return (
             <View style={MainStyles.container}>
                 <Header 

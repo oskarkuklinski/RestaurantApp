@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
 import MainStyles from '../Styles';
 import { StyleSheet, Text, View, Button, TouchableOpacity, TextInput, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -147,24 +146,24 @@ class OrderSummaryPage extends React.Component {
     render() {
         return (
             <View style={MainStyles.container}>
-                <Text>Table no. {this.state.number}</Text>
-                <Text>{this.state.basketItems.toString()}</Text>
-            <View style={styles.container}>
-                <Header
-                    table={this.state.table}
-                    numberOfItems={this.props.basket.numberOfItems} 
-                    navigate={this.props.navigation.navigate} 
-                    basket={this.props.basket} />
-                <Summary
-                    basket={this.props.basket}
-                    removeFromBasket={this.removeFromBasket}
-                    increaseQuantity={this.increaseQuantity}
-                    decreaseQuantity={this.decreaseQuantity} />
+                <View style={styles.container}>
+                    <Header
+                        table={this.state.table}
+                        numberOfItems={this.props.basket.numberOfItems} 
+                        navigate={this.props.navigation.navigate} 
+                        basket={this.props.basket} />
+                    <Summary
+                        basket={this.props.basket}
+                        removeFromBasket={this.removeFromBasket}
+                        increaseQuantity={this.increaseQuantity}
+                        decreaseQuantity={this.decreaseQuantity} />
+                </View>
             </View>
         );
     }
 }
-
+                
+                
 // Select data that from the store (redux) that component needs
 function mapStateToProps(state){
     return {
