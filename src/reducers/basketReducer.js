@@ -2,7 +2,8 @@ import * as actionType from '../actions/ActionType';
 
 const initialState = {
     numberOfItems: 0,
-    items: []
+    items: [],
+    total: 0,
 };
 
 const basketReducer = (state = initialState, action) => {
@@ -12,6 +13,7 @@ const basketReducer = (state = initialState, action) => {
             return {
                 ...state,
                 numberOfItems: state.numberOfItems += 1,
+                total: state.total += action.item.price,
                 items: [
                     ...state.items,
                     action.item,
@@ -23,6 +25,7 @@ const basketReducer = (state = initialState, action) => {
                 // update the numberOfItems value in a basket object
                 ...state,
                 numberOfItems: state.numberOfItems += 1,
+                total: state.total += action.item.price,
                 // iterate through the items array to reach the object and update its quantity value
                 items: state.items.map((item, index) => {
                     if (index === action.item.index) {
@@ -41,6 +44,7 @@ const basketReducer = (state = initialState, action) => {
                 return {
                     ...state,
                     numberOfItems: state.numberOfItems -= 1,
+                    total: state.total -= action.item.price,
                     items: state.items.map((item, index) => {
                         if (index === action.item.index) {
                             return {
@@ -56,6 +60,7 @@ const basketReducer = (state = initialState, action) => {
                 return {
                     ...state,
                     numberOfItems: state.numberOfItems -= action.item.quantity,
+                    total: state.total -= (action.item.price * action.item.quantity),
                     items: [
                         ...state.items.splice(0, action.item.index),
                         ...state.items.splice(action.item.index + 1)

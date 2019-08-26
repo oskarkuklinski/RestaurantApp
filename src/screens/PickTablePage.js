@@ -33,16 +33,17 @@ class PickTablePage extends React.Component {
     }
 
     handleNavigation() {
-        if (this.state.table != "" && this.state.table != null) {
+        let table = Number(this.state.table);
+        if (table == "" || table == null || table <= 0) {
+            alert("Please enter your table number");
+        } else {
             // change redux prop value using the value from input field
             this.props.dispatch({
                 type: 'CHANGE_TABLE_NUMBER',
-                payload: this.state.table,
+                payload: table,
             });
             // Navigate to the next page
             this.props.navigation.navigate('FoodMenu');
-        } else {
-            alert("Please enter your table number");
         }
     }
 
@@ -55,17 +56,14 @@ class PickTablePage extends React.Component {
                     keyboardType='numeric'
                     onChangeText={(text) => this.onChanged(text)}
                     value={this.state.table}
-                    maxLength={2}>
+                    maxLength={2}
+                    autoFocus={true}>
                 </TextInput>
                 <TouchableOpacity 
-                style={MainStyles.buttons} 
-                onPress={() => this.props.navigation.navigate('FoodMenu', { data: this.state.number })}>
-              <Text style={MainStyles.text}>Next</Text>
-                </TouchableOpacity>
-                <Button
-                    title="Next"
+                    style={MainStyles.buttons} 
                     onPress={() => this.handleNavigation()}>
-                </Button>
+                    <Text style={MainStyles.text}>Next</Text>
+                </TouchableOpacity>
             </View>
         );
     }

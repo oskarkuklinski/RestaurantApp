@@ -18,7 +18,6 @@ class Header extends React.Component {
                     </Icon>
                 </TouchableOpacity>
                 <Text>Summary</Text>
-                <Text>Table no. {this.props.table}</Text>
             </View>
         );
     }
@@ -36,9 +35,24 @@ class Summary extends React.Component {
                        increaseQuantity={this.props.increaseQuantity} 
                        decreaseQuantity={this.props.decreaseQuantity} />
         });
+        if (this.props.basket.items.length > 0) {
+            return (
+                <View style={styles.summary}>
+                    {basketItems}
+                    <TouchableOpacity>
+                        <Text>Table no: {this.props.table}</Text>
+                    </TouchableOpacity>
+                    <Text>Total: {this.props.basket.total} £</Text>
+                    <Button
+                        title="Checkout">
+                    </Button>
+                </View>
+            );
+        }
         return (
-            <View style={styles.summary}>
-                {basketItems}
+            <View>
+                <Text>You have not chosen any products yet.</Text>
+                <Text>Please go back to the Menu page if you wish to order.</Text>
             </View>
         );
     }
@@ -70,7 +84,6 @@ class BasketItem extends React.Component {
     render() {
         return (
             <View style={styles.item}>
-                <Text style={styles.name}>{this.props.item.index}</Text>
                 <Text style={styles.name}>{this.props.item.name}</Text>
                 <View style={styles.quantity}>
                     <TouchableOpacity
@@ -148,12 +161,12 @@ class OrderSummaryPage extends React.Component {
             <View style={MainStyles.container}>
                 <View style={styles.container}>
                     <Header
-                        table={this.state.table}
                         numberOfItems={this.props.basket.numberOfItems} 
                         navigate={this.props.navigation.navigate} 
                         basket={this.props.basket} />
                     <Summary
                         basket={this.props.basket}
+                        table={this.props.table}
                         removeFromBasket={this.removeFromBasket}
                         increaseQuantity={this.increaseQuantity}
                         decreaseQuantity={this.decreaseQuantity} />
@@ -179,6 +192,9 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
+    },
+    summary: {
+        margin: 5
     },
     container: {
         flex: 1, 
