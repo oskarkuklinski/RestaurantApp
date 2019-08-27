@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MainStyles from '../Styles';
 import { connect } from 'react-redux';
+import { fetchData, addToBasket } from '../actions/index';
 
 /*
 FoodMenuPage component structure
@@ -13,35 +14,6 @@ FoodMenuPage
         Category
             Item
 */
-
-// -------------- TEST DATA ----------------------
-const testData = [
-    {
-        id: 0, 
-        name: 'Promotions and Deals',
-        contents: [ 
-            { name: 'Family Deal', price: 20, desc: 'Family sharing deal including 20 spicy wings, 3 soft drinks and starter of your choice' },
-            { name: 'Pizza Club', price: 8 ,desc: 'Pizza of your choice with a soft drink or a beer inlcuded' },
-            { name: 'Sharing Platter', price: 25, desc: 'A whole chicken with two sides of your choice and two soft drinks' }
-        ]
-    },
-    {
-        id: 1,
-        name: 'Drinks and Spirits',
-        contents: [ 
-            { name: 'Soft Drink', price: 4, desc: 'coca-cola classic, coca-cola zero, coca-cola light, sprite, fanta' },
-            { name: 'Beer', price: 5, desc: 'Peroni, Carlsberg, Stella, Guinness' },
-        ]
-    },
-    {
-        id: 2,
-        name: 'Starters',
-        contents: [ 
-            { name: 'Chicken Wings', price: 5, desc: '3 chicken wings with a baste of your choice' },
-            { name: 'Olives', price: 4, desc: 'Small portion of olives to start your evening' },
-        ]
-    }
-];
 
 // ---------- HEADER --------------------------
 class Header extends React.Component {
@@ -72,16 +44,23 @@ class Header extends React.Component {
 
 // ---------------- MENU ---------------------------
 class Menu extends React.Component {
+    
+    componentDidMount() {
+        this.props.fetchData();
+    }
+    
     render() {
+        console.log(this.props.items);
         let items = this.props.items.map((item, index) => {
             return <Category 
-                       key={item.id} 
-                       item={item}
-                       addToBasket={this.props.addToBasket}/>
+                        key={item.id} 
+                        item={item}
+                        basket={this.props.basket}
+                        addToBasket={this.props.addToBasket} />
         });
         return (
             <View>
-                {items}
+                {(this.props.data.isFetching) ? <Text>Loading...</Text> : items}
             </View>
         );
     }
@@ -101,6 +80,7 @@ class Category extends React.Component {
             return <Item 
                        key={index} 
                        item={item} 
+                       basket={this.props.basket}
                        addToBasket={this.props.addToBasket} />
         });
         return (
@@ -136,10 +116,12 @@ class Item extends React.Component {
         }
         this.handleAddToBasket = this.handleAddToBasket.bind(this);
     }
+    
     // Event handler
     handleAddToBasket(e) {
-        this.props.addToBasket(this.props.item);
+        this.props.addToBasket(this.props.item, this.props.basket);
     }
+    
     render() {
         return (
             <View>
@@ -177,36 +159,13 @@ class FoodMenuPage extends React.Component {
                 numberOfItems: this.props.basket.numberOfItems,
                 items: this.props.basket.items,
             },
-            items: testData,
+            items: this.props.data.data,
             table: this.props.table,
-        }
-        // Bind the function to the component
-        this.addToBasket = this.addToBasket.bind(this)
-    }
-    
-    addToBasket(item) {
-        let newItem = item;
-        // increase quantity of repeating object
-        if (this.props.basket.items[newItem.index]) {
-            this.props.dispatch({
-                type: 'INCREASE_QUANTITY',
-                payload: this.state.basket,
-                item: newItem,
-            });
-        }  else {
-            // add quantity and index value to the object in the basket
-            newItem.quantity = 1;
-            newItem.index = this.props.basket.items.length;
-            this.props.dispatch({
-                type: 'ADD_TO_BASKET',
-                payload: this.state.basket,
-                item: newItem,
-            });
         }
     }
     
     render() {
-        console.log(this.props.basket);
+        console.log(this.props.data.data);
         return (
             <View style={MainStyles.container}>
                 <Header 
@@ -216,8 +175,11 @@ class FoodMenuPage extends React.Component {
                     navigate={this.props.navigation.navigate} />
                 <Text>Search the menu</Text>
                 <Menu 
-                    items={this.state.items}
-                    addToBasket={this.addToBasket}
+                    items={this.props.data.data}
+                    basket={this.props.basket}
+                    data={this.props.data}
+                    fetchData={this.props.fetchData}
+                    addToBasket={this.props.addToBasket}
                     basketItems={this.state.basketItems}/>
             </View>
         );
@@ -225,12 +187,22 @@ class FoodMenuPage extends React.Component {
 }
 
 // Select data from the store (redux) that component needs
-function mapStateToProps(state){
+function mapStateToProps(state) {
     return {
         table: state.table.table,
         basket: state.basket,
+        data: state.data,
     }
 }
+
+// Bind the actions to be used for the component
+function mapDispatchToProps (dispatch) {
+    return {
+        fetchData: () => { dispatch(fetchData()) },
+        addToBasket: (item, basket) => { dispatch(addToBasket(item, basket)) },
+    }
+}
+
 
 const styles = StyleSheet.create({
     header: {
@@ -261,4 +233,4 @@ const styles = StyleSheet.create({
 });
 
 // Connect redux store with react component and export it
-export default connect(mapStateToProps)(FoodMenuPage);
+export default connect(mapStateToProps, mapDispatchToProps)(FoodMenuPage);

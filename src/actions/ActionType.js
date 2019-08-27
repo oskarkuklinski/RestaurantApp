@@ -1,5 +1,12 @@
-//Action types
+// Fetching data actions
+export const FETCHING_DATA = 'FETCHING_DATA';
+export const FETCHING_DATA_SUCCESS = 'FETCHING_DATA_SUCCESS';
+export const FETCHING_DATA_FAILURE = 'FETCHING_DATA_FAILURE';
+
+// Table number actions
 export const CHANGE_TABLE_NUMBER = 'CHANGE_TABLE_NUMBER';
+
+// Basket actions
 export const ADD_TO_BASKET = 'ADD_TO_BASKET';
 export const INCREASE_QUANTITY = 'INCREASE_QUANTITY';
 export const DECREASE_QUANTITY = 'DECREASE_QUANTITY';

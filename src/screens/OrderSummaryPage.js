@@ -3,6 +3,7 @@ import MainStyles from '../Styles';
 import { StyleSheet, Text, View, Button, TouchableOpacity, TextInput, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
+import { removeFromBasket, increaseQuantity, decreaseQuantity } from '../actions/index';
 
 // ---------- HEADER --------------------------
 class Header extends React.Component {
@@ -68,14 +69,14 @@ class BasketItem extends React.Component {
     }
     
     handleRemoveFromBasket(e) {
-        this.props.removeFromBasket(this.props.item);
+        this.props.removeFromBasket(this.props.item, this.props.basket);
     }
     handleIncreaseQuantity(e) {
-        this.props.increaseQuantity(this.props.item);
+        this.props.increaseQuantity(this.props.item, this.props.basket);
     }
     handleDecreaseQuantity(e) {
         if (this.props.item.quantity > 1) {
-            this.props.decreaseQuantity(this.props.item);
+            this.props.decreaseQuantity(this.props.item, this.props.basket);
         } else {
             alert("Press x to remove the product from basket");
         }
@@ -127,33 +128,6 @@ class OrderSummaryPage extends React.Component {
                 items: this.props.basket.items,
             },
         }
-        this.removeFromBasket = this.removeFromBasket.bind(this);
-        this.increaseQuantity = this.increaseQuantity.bind(this);
-        this.decreaseQuantity = this.decreaseQuantity.bind(this);
-    }
-    
-    removeFromBasket(item) { 
-        this.props.dispatch({
-            type: "REMOVE_FROM_BASKET",
-            payload: this.state.basket,
-            item: item,
-        })
-    }
-    
-    increaseQuantity(item) {
-        this.props.dispatch({
-            type: 'INCREASE_QUANTITY',
-            payload: this.state.basket,
-            item: item,
-        })
-    }
-    
-    decreaseQuantity(item) {
-        this.props.dispatch({
-            type: 'DECREASE_QUANTITY',
-            payload: this.state.basket,
-            item: item,
-        })
     }
     
     render() {
@@ -167,9 +141,9 @@ class OrderSummaryPage extends React.Component {
                     <Summary
                         basket={this.props.basket}
                         table={this.props.table}
-                        removeFromBasket={this.removeFromBasket}
-                        increaseQuantity={this.increaseQuantity}
-                        decreaseQuantity={this.decreaseQuantity} />
+                        removeFromBasket={this.props.removeFromBasket}
+                        increaseQuantity={this.props.increaseQuantity}
+                        decreaseQuantity={this.props.decreaseQuantity} />
                 </View>
             </View>
         );
@@ -182,6 +156,15 @@ function mapStateToProps(state){
     return {
         table: state.table.table,
         basket: state.basket,
+    }
+}
+
+// Bind the actions to be used for the component
+function mapDispatchToProps (dispatch) {
+    return {
+        removeFromBasket: (item, basket) => { dispatch(removeFromBasket(item, basket)) },
+        increaseQuantity: (item, basket) => { dispatch(increaseQuantity(item, basket)) },
+        decreaseQuantity: (item, basket) => { dispatch(decreaseQuantity(item, basket)) },
     }
 }
 
@@ -237,4 +220,4 @@ const styles = StyleSheet.create({
 });
 
 // Connect redux store with react component and export it
-export default connect(mapStateToProps)(OrderSummaryPage);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderSummaryPage);

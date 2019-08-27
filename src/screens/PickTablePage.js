@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import MainStyles from '../Styles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
+import { changeTable } from '../actions/index';
 
 class PickTablePage extends React.Component {
     // Initial states
@@ -38,10 +39,7 @@ class PickTablePage extends React.Component {
             alert("Please enter your table number");
         } else {
             // change redux prop value using the value from input field
-            this.props.dispatch({
-                type: 'CHANGE_TABLE_NUMBER',
-                payload: table,
-            });
+            this.props.changeTable(table);
             // Navigate to the next page
             this.props.navigation.navigate('FoodMenu');
         }
@@ -77,6 +75,12 @@ function mapStateToProps(state){
     }
 }
 
+function mapDispatchToProps (dispatch) {
+    return {
+        changeTable: (table) => dispatch(changeTable(table))
+    }
+}
+
 // Screen styles
 const styles = StyleSheet.create({
     container: {
@@ -101,4 +105,4 @@ const styles = StyleSheet.create({
 });
 
 // Connect redux store with react component and export it
-export default connect(mapStateToProps)(PickTablePage);
+export default connect(mapStateToProps, mapDispatchToProps)(PickTablePage);
