@@ -10,15 +10,17 @@ class Header extends React.Component {
     render() {
         return (
             <View
-                style={styles.header}>
+                style={MainStyles.header}>
                 <TouchableOpacity
                     onPress={() => this.props.navigate('FoodMenu')}>
                     <Icon
+                        style={MainStyles.icon}
                         name='arrow-left'
                         color="#F2E1AE">
                     </Icon>
                 </TouchableOpacity>
-                <Text>Summary</Text>
+                <Text style={MainStyles.text}>Summary</Text>
+                <View></View>
             </View>
         );
     }
@@ -133,18 +135,16 @@ class OrderSummaryPage extends React.Component {
     render() {
         return (
             <View style={MainStyles.container}>
-                <View style={styles.container}>
-                    <Header
-                        numberOfItems={this.props.basket.numberOfItems} 
-                        navigate={this.props.navigation.navigate} 
-                        basket={this.props.basket} />
-                    <Summary
-                        basket={this.props.basket}
-                        table={this.props.table}
-                        removeFromBasket={this.props.removeFromBasket}
-                        increaseQuantity={this.props.increaseQuantity}
-                        decreaseQuantity={this.props.decreaseQuantity} />
-                </View>
+                <Header
+                    numberOfItems={this.props.basket.numberOfItems} 
+                    navigate={this.props.navigation.navigate} 
+                    basket={this.props.basket} />
+                <Summary
+                    basket={this.props.basket}
+                    table={this.props.table}
+                    removeFromBasket={this.props.removeFromBasket}
+                    increaseQuantity={this.props.increaseQuantity}
+                    decreaseQuantity={this.props.decreaseQuantity} />
             </View>
         );
     }

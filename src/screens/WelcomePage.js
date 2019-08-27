@@ -1,6 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
 import MainStyles from '../Styles';
+
+// Flag icons
+import english from '../../assets/Icons/flag_english.png';
+import spanish from '../../assets/Icons/flag_spanish.png';
+import french from '../../assets/Icons/flag_french.png';
+import chinese from '../../assets/Icons/flag_chinese.png';
+
 
 export default class WelcomePage extends React.Component {
 
@@ -14,28 +21,35 @@ export default class WelcomePage extends React.Component {
                     data={[
                         {
                             key: 'English',
-                            image: 'url'
+                            image: english,
                         },
                         {
                             key: 'Español',
-                            image: 'url'
+                            image: spanish,
                         },
                         {
                             key: 'Français',
-                            image: 'url'
+                            image: french,
                         },
                         {
                             key: '中文',
-                            image: 'url'
+                            image: chinese,
                         }
                     ]}
-                    renderItem={({item}) =>
-                        <TouchableHighlight>
-                            <Text 
-                                onPress={() => this.props.navigation.navigate("Main")}
-                                style={styles.language}>{item.key}
+                    renderItem={({item}) => 
+                        <TouchableOpacity 
+                            onPress={() => this.props.navigation.navigate('Main')}
+                            style={styles.languageChoice}>
+                            <Image 
+                                source={item.image}
+                                style={styles.flag}></Image>
+                            <Text
+                                style={styles.language}>
+                                {item.key}
                             </Text>
-                        </TouchableHighlight>}>
+                        </TouchableOpacity>
+                        }
+                    >
                 </FlatList>
             </View>
         );
@@ -87,7 +101,15 @@ const styles = StyleSheet.create({
         padding: 20,
         fontSize: 18,
         color: '#fff',
+    },
+    languageChoice: {
+        display: 'flex',
+        flexDirection: 'row',
         borderWidth: 3,
         borderColor:'#F2E1AE',
+    },
+    flag: {
+        height: '100%',
+        width: 80,
     }
 });

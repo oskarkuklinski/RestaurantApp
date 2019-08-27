@@ -24,18 +24,18 @@ class Header extends React.Component {
     render() {
         return (
             <View
-                style={styles.header}>
-                <Text>ORDER</Text>
-                <Text>Table no. {this.props.table}</Text>
+                style={MainStyles.header}>
+                <Text style={MainStyles.text}>ORDER</Text>
+                <Text style={MainStyles.text}>Table no. {this.props.table}</Text>
                 <TouchableOpacity
                     style={styles.basket}
                     onPress={() => this.props.navigate('OrderSummary')}>
                     <Icon
                         name='shopping-cart'
                         color="#F2E1AE"
-                        style={styles.basketIcon}>
+                        style={MainStyles.icon}>
                     </Icon>
-                    <Text>({this.props.basket.numberOfItems})</Text>
+                    <Text style={MainStyles.text}>({this.props.basket.numberOfItems})</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -50,7 +50,6 @@ class Menu extends React.Component {
     }
     
     render() {
-        console.log(this.props.items);
         let items = this.props.items.map((item, index) => {
             return <Category 
                         key={item.id} 
@@ -60,7 +59,7 @@ class Menu extends React.Component {
         });
         return (
             <View>
-                {(this.props.data.isFetching) ? <Text>Loading...</Text> : items}
+                {(this.props.data.isFetching) ? <Text style={MainStyles.text}>Loading...</Text> : items}
             </View>
         );
     }
@@ -87,12 +86,14 @@ class Category extends React.Component {
             <View>
                 <TouchableOpacity
                     // Change display of details after a click depending on a current state
-                    onPress={() => (this.state.style == 'none') ? this.setState({style: 'flex'}) : this.setState({style: 'none'})}>
-                    <Text>
+                    onPress={() => (this.state.style == 'none') ? this.setState({style: 'flex'}) : this.setState({style: 'none'})}
+                    style={MainStyles.category}>
+                    <Text style={MainStyles.text}>
                         {this.props.item.name}
                     </Text>
                     <Icon
-                        name='minus'
+                        style={MainStyles.icon}
+                        name={(this.state.style == 'none') ? 'minus' : 'chevron-down'}
                         color='#F2E1AE'>
                     </Icon>
                 </TouchableOpacity>
@@ -112,7 +113,7 @@ class Item extends React.Component {
         super(props);
         this.state = {
             // initial state of a style for an item description 
-            style: 'none'
+            flag: false,
         }
         this.handleAddToBasket = this.handleAddToBasket.bind(this);
     }
@@ -127,22 +128,29 @@ class Item extends React.Component {
             <View>
                 <TouchableOpacity
                     // Change display of details after a click depending on a current state
-                    onPress={() => (this.state.style == 'none') ? this.setState({style: 'flex'}) : this.setState({style: 'none'})}>
+                    onPress={() => (this.state.flag == false) ? this.setState({flag: true}) : this.setState({flag: false})}
+                    style={MainStyles.item}>
                     <Text
-                        style={styles.item}>
-                        {this.props.item.name} - {this.props.item.price} £
+                        style={MainStyles.text}>
+                        {this.props.item.name} - £{this.props.item.price}
                     </Text>
+                    <Icon
+                        style={MainStyles.icon}
+                        name={(this.state.style == 'none') ? 'minus' : 'chevron-down'}
+                        color='#F2E1AE'>
+                    </Icon>
                 </TouchableOpacity>
                 <View
                     // Apply changes in style here
-                    style={{display: this.state.style}}>
-                    <Text>
+                    style={(this.state.flag == false) ? MainStyles.itemHidden : MainStyles.description}>
+                    <Text style={MainStyles.text}>
                         {this.props.item.desc}
                     </Text>
-                    <Button
-                        title="Add"
+                    <TouchableOpacity
+                        style={styles.button}
                         onPress={this.handleAddToBasket}>
-                    </Button>
+                        <Text style={MainStyles.text}>ADD</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
@@ -165,7 +173,6 @@ class FoodMenuPage extends React.Component {
     }
     
     render() {
-        console.log(this.props.data.data);
         return (
             <View style={MainStyles.container}>
                 <Header 
@@ -173,7 +180,6 @@ class FoodMenuPage extends React.Component {
                     table={this.props.table} 
                     // navigation prop reference to navigate to the summary page
                     navigate={this.props.navigation.navigate} />
-                <Text>Search the menu</Text>
                 <Menu 
                     items={this.props.data.data}
                     basket={this.props.basket}
@@ -230,6 +236,11 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 26
     },
+    button: {
+        marginLeft: '15%',
+        marginRight: '15%',
+        backgroundColor: '#D93232'
+    }
 });
 
 // Connect redux store with react component and export it

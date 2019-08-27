@@ -2,7 +2,6 @@ import * as actionType from '../actions/ActionType';
 
 const initialState = {
     data: [],
-    dataFetched: false,
     isFetching: false,
     error: false,
 }
