@@ -19,6 +19,7 @@ export default EStyleSheet.create({
         fontSize:51,
         color:'#F2E1AE',
         margin:20,
+        marginBottom:35,
         textAlign:'center'
     },
     buttons: {

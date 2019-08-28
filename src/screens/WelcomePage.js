@@ -15,9 +15,9 @@ export default class WelcomePage extends React.Component {
         return (
             <View style={MainStyles.container}>
                 <Text style={MainStyles.title}>Hello!</Text>
-                <Text style={styles.pickLanguage}>Choose your language</Text>
+                {/* <Text style={styles.pickLanguage}>Choose your language</Text> */}
                 <View style={styles.viewLanguage}></View>
-                <FlatList
+                <FlatList style={styles.border}
                     data={[
                         {
                             key: 'English',
@@ -60,56 +60,52 @@ export default class WelcomePage extends React.Component {
 // <Image source={item.image}></Image>
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1, 
-        alignItems: "center", 
-        justifyContent: "center",
-        backgroundColor: '#F27F3D',
-    },
 
-    title: {
-        fontSize: 51,
-        color:'#F2E1AE',
-        marginTop:86,
-        textAlign:'center',
-        borderWidth:1,
-        borderStyle:'solid',
-        borderColor:'black',
-    },
-    viewLanguage:{
-        margin:20,
-        width:309,
-        height:52,
-        backgroundColor:'#F2E1AE',
-        opacity: 0.2,
-        borderRadius:13,
+    // viewLanguage:{
+    //     margin:20,
+    //     width:309,
+    //     height:52,
+    //     backgroundColor:'#F2E1AE',
+    //     opacity: 0.2,
+    //     borderRadius:13,
         
-    },
-    pickLanguage:{
-        position:'relative',
-        top:"11%",
-        left:'-10%',
-        width:'80%',
-        fontSize:18,
-        lineHeight:52,
-        opacity:1,
-        color:"#fff",
-        marginLeft:15,
+    // },
+    // // pickLanguage:{
+    //     position:'relative',
+    //     top:"11%",
+    //     left:'-10%',
+    //     width:'80%',
+    //     fontSize:18,
+    //     lineHeight:52,
+    //     opacity:1,
+    //     color:"#fff",
+    //     marginLeft:15,
 
+    // },
+    border:{
+        width:"80%",
+        borderWidth:3,
+        borderColor:'black',
+        marginBottom:150,
+        borderRadius:13,
+        borderColor:"rgba(242, 225, 174, 0.75)",
+        backgroundColor:'rgba(242, 225, 174, 0.2)',
+        // textAlign:'center'
     },
     language: {
-        padding: 20,
+        margin: 8,
+        padding: 33,
         fontSize: 18,
         color: '#fff',
     },
     languageChoice: {
         display: 'flex',
         flexDirection: 'row',
-        borderWidth: 3,
         borderColor:'#F2E1AE',
     },
     flag: {
+        marginLeft:15,
         height: '100%',
-        width: 80,
+        width: 100,
     }
 });
