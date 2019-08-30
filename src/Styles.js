@@ -8,6 +8,7 @@ EStyleSheet.build({$rem: entireScreenWidth / 380});
 
 export default EStyleSheet.create({
     container: { 
+        flex:1,
         height:'100%',
         flexDirection:'column',
         justifyContent: 'flex-start',

@@ -1,9 +1,13 @@
 import React from 'react';
 import MainStyles from '../Styles';
-import { StyleSheet, Text, View, Button, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { ScrollView,StyleSheet, Text, View, Button, TouchableOpacity, TextInput, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import { removeFromBasket, increaseQuantity, decreaseQuantity } from '../actions/index';
+import { Dimensions } from "react-native";
+
+var width = Dimensions.get('window').width; //full width
+var height = Dimensions.get('window').height //full height
 
 // ---------- HEADER --------------------------
 class Header extends React.Component {
@@ -41,14 +45,21 @@ class Summary extends React.Component {
         if (this.props.basket.items.length > 0) {
             return (
                 <View style={styles.summary}>
+                    <ScrollView>
                     {basketItems}
                     <TouchableOpacity>
-                        <Text>Table no: {this.props.table}</Text>
+                        <Text style={styles.summaryContent}>Table no: {this.props.table}</Text>
                     </TouchableOpacity>
-                    <Text>Total: {this.props.basket.total} £</Text>
-                    <Button
+                    <Text style={styles.summaryContent}>Total: {this.props.basket.total} £</Text>
+                    {/* <Button
                         title="Checkout">
-                    </Button>
+                    </Button> */}
+                    </ScrollView>
+                    <View>
+                    <TouchableOpacity style={styles.checkoutButton}>
+                        <Text style={styles.checkoutText}>Checkout</Text>
+                    </TouchableOpacity>
+                    </View>
                 </View>
             );
         }
@@ -91,15 +102,15 @@ class BasketItem extends React.Component {
                 <View style={styles.quantity}>
                     <TouchableOpacity
                         onPress={this.handleDecreaseQuantity}>
-                        <Icon
+                        <Icon style={styles.icon}
                             name='minus'
                             color="#F2E1AE">
                         </Icon>
                     </TouchableOpacity>
-                    <Text>{this.props.item.quantity}</Text>
+                    <Text style={styles.icon}>{this.props.item.quantity}</Text>
                     <TouchableOpacity
                         onPress={this.handleIncreaseQuantity}>
-                        <Icon
+                        <Icon style={styles.icon}
                             name='plus'
                             color="#F2E1AE">
                         </Icon>
@@ -109,7 +120,7 @@ class BasketItem extends React.Component {
                 <TouchableOpacity 
                     style={styles.remove}
                     onPress={this.handleRemoveFromBasket}>
-                    <Icon
+                    <Icon style={styles.icon}
                         name='remove'
                         color="#F2E1AE">
                     </Icon>
@@ -139,7 +150,7 @@ class OrderSummaryPage extends React.Component {
                     numberOfItems={this.props.basket.numberOfItems} 
                     navigate={this.props.navigation.navigate} 
                     basket={this.props.basket} />
-                <Summary
+                <Summary 
                     basket={this.props.basket}
                     table={this.props.table}
                     removeFromBasket={this.props.removeFromBasket}
@@ -177,7 +188,24 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
     summary: {
-        margin: 5
+        flex:1,
+        margin: 5,
+    },
+    summaryContent:{
+        width:width,
+        marginTop:20,
+        marginBottom:20,
+        paddingTop:20,
+        paddingBottom:20,
+        fontSize:24,
+        borderBottomColor: "#F2E1AE",
+        borderBottomWidth:1,
+        borderTopColor: "#F2E1AE",
+        borderTopWidth:1,
+        textAlign:"justify",
+        // textAlign:"center",
+        // backgroundColor:'#D93232',
+        
     },
     container: {
         flex: 1, 
@@ -197,6 +225,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
+        fontSize:32,
     },
     quantity: {
         flex: 1,
@@ -207,16 +236,41 @@ const styles = StyleSheet.create({
     },
     name: {
         flex: 1,
+        fontSize:24,
+        marginTop:10,
+        marginBottom:10,
+        // backgroundColor:"#000"
     },
     price: {
         flex: 1,
+        fontSize:24,
     },
     remove: {
         flex: 1,
+        fontSize:32,
     },
     title: {
-        fontSize: 26
+        fontSize: 26,
+        // backgroundColor:"#fff"
     },
+    icon:{
+        fontSize:26,
+    },
+    checkoutButton:{
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    width:width,
+    height: height*0.1,
+    backgroundColor:"#D93232",
+    textAlign:"center",
+    },
+    checkoutText:{
+        fontSize:26,
+        textTransform:'uppercase',
+        color:"#FFFFFF",
+        fontWeight:'bold',
+    }
 });
 
 // Connect redux store with react component and export it
