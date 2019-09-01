@@ -28,11 +28,12 @@ const basketReducer = (state = initialState, action) => {
                 total: state.total += action.item.price,
                 // iterate through the items array to reach the object and update its quantity value
                 items: state.items.map((item, index) => {
-                    if (item == action.item) {
+                    // compare the property such as name as these two objects differ with quantity property
+                    if (item.name == action.item.name) {
                         return {
                             // return the needed object and update the quantity value
                             ...item,
-                            quantity: action.item.quantity += 1
+                            quantity: item.quantity += 1
                         }
                     }
                     // return unchanged item that does not match the index
@@ -46,10 +47,11 @@ const basketReducer = (state = initialState, action) => {
                     numberOfItems: state.numberOfItems -= 1,
                     total: state.total -= action.item.price,
                     items: state.items.map((item, index) => {
-                        if (item == action.item) {
+                        // compare the property such as name as these two objects differ with quantity property
+                        if (item.name == action.item.name) {
                             return {
                                 ...item,
-                                quantity: action.item.quantity -= 1
+                                quantity: item.quantity -= 1
                             }
                         }
                         return item

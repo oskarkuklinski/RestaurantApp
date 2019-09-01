@@ -10,9 +10,12 @@ export function changeTable(table) {
 
 // BASKET ACTIONS
 export function addToBasket(item, basket) {
+    console.log(item, basket.items);
     let newItem = item;
+    
     // increase quantity of repeating object
-    if (basket.items.includes(newItem)) {
+    // compare items' names as the whole objects differ in value of the quantity property
+    if (basket.items.some(r => r.name == item.name)) {
         return {
             type: 'INCREASE_QUANTITY',
             payload: basket,

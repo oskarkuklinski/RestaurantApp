@@ -114,6 +114,7 @@ class Item extends React.Component {
         this.state = {
             // initial state of a style for an item description 
             flag: false,
+            pressedButton: false,
         }
         this.handleAddToBasket = this.handleAddToBasket.bind(this);
     }
@@ -148,8 +149,8 @@ class Item extends React.Component {
                     </Text>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={this.handleAddToBasket}>
-                        <Text style={MainStyles.text}>ADD</Text>
+                        onPress={this.handleAddToBasket} >
+                        <Text style={MainStyles.text}>{this.props.basket.items.includes(this.props.item)}ADD</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -240,6 +241,9 @@ const styles = StyleSheet.create({
         marginLeft: '15%',
         marginRight: '15%',
         backgroundColor: '#D93232'
+    },
+    disabledButton: {
+        backgroundColor: 'grey',
     }
 });
 
