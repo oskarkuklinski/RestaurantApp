@@ -46,14 +46,11 @@ class Summary extends React.Component {
             return (
                 <View style={styles.summary}>
                     <ScrollView>
-                    {basketItems}
-                    <TouchableOpacity>
-                        <Text style={styles.summaryContent}>Table no: {this.props.table}</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.summaryContent}>Total: {this.props.basket.total} £</Text>
-                    {/* <Button
-                        title="Checkout">
-                    </Button> */}
+                        {basketItems}
+                        <TouchableOpacity>
+                            <Text style={styles.summaryContent}>Table no: {this.props.table}</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.summaryContent}>Total: {this.props.basket.total} £</Text>
                     </ScrollView>
                     <View>
                     <TouchableOpacity style={styles.checkoutButton}>
@@ -144,6 +141,7 @@ class OrderSummaryPage extends React.Component {
     }
     
     render() {
+        console.log(this.props.basket);
         return (
             <View style={MainStyles.container}>
                 <Header

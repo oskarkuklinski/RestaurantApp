@@ -28,7 +28,7 @@ const basketReducer = (state = initialState, action) => {
                 total: state.total += action.item.price,
                 // iterate through the items array to reach the object and update its quantity value
                 items: state.items.map((item, index) => {
-                    if (index === action.item.index) {
+                    if (item == action.item) {
                         return {
                             // return the needed object and update the quantity value
                             ...item,
@@ -46,7 +46,7 @@ const basketReducer = (state = initialState, action) => {
                     numberOfItems: state.numberOfItems -= 1,
                     total: state.total -= action.item.price,
                     items: state.items.map((item, index) => {
-                        if (index === action.item.index) {
+                        if (item == action.item) {
                             return {
                                 ...item,
                                 quantity: action.item.quantity -= 1
@@ -62,8 +62,8 @@ const basketReducer = (state = initialState, action) => {
                     numberOfItems: state.numberOfItems -= action.item.quantity,
                     total: state.total -= (action.item.price * action.item.quantity),
                     items: [
-                        ...state.items.splice(0, action.item.index),
-                        ...state.items.splice(action.item.index + 1)
+                        ...state.items.slice(0, state.items.indexOf(action.item)),
+                        ...state.items.slice(state.items.indexOf(action.item) + 1, state.items.length),
                     ]
                 };
                 

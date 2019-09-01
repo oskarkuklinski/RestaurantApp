@@ -12,7 +12,7 @@ export function changeTable(table) {
 export function addToBasket(item, basket) {
     let newItem = item;
     // increase quantity of repeating object
-    if (basket.items[newItem.index]) {
+    if (basket.items.includes(newItem)) {
         return {
             type: 'INCREASE_QUANTITY',
             payload: basket,
@@ -21,7 +21,6 @@ export function addToBasket(item, basket) {
     }  else {
         // add quantity and index value to the object in the basket
         newItem.quantity = 1;
-        newItem.index = basket.items.length;
         return {
             type: 'ADD_TO_BASKET',
             payload: basket,
