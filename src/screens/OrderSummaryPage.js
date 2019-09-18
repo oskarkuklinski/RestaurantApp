@@ -48,9 +48,9 @@ class Summary extends React.Component {
                     <ScrollView>
                         {basketItems}
                         <TouchableOpacity>
-                            <Text style={styles.summaryContent}>Table no: {this.props.table}</Text>
+                            <Text style={MainStyles.text}>Table no: {this.props.table}</Text>
                         </TouchableOpacity>
-                        <Text style={styles.summaryContent}>Total: {this.props.basket.total} £</Text>
+                        <Text style={MainStyles.text}>Total: {this.props.basket.total} £</Text>
                     </ScrollView>
                     <View>
                     <TouchableOpacity style={styles.checkoutButton}>
@@ -62,8 +62,13 @@ class Summary extends React.Component {
         }
         return (
             <View>
-                <Text>You have not chosen any products yet.</Text>
-                <Text>Please go back to the Menu page if you wish to order.</Text>
+                <Icon
+                    name='shopping-cart'
+                    color="#F2E1AE"
+                    style={MainStyles.text}>
+                </Icon>
+                <Text style={MainStyles.text}>You have not chosen any products yet.</Text>
+                <Text style={MainStyles.text}>Please go back to the Menu page if you wish to order.</Text>
             </View>
         );
     }
@@ -94,30 +99,27 @@ class BasketItem extends React.Component {
     
     render() {
         return (
-            <View style={styles.item}>
-                <Text style={styles.name}>{this.props.item.name}</Text>
-                <View style={styles.quantity}>
-                    <TouchableOpacity
-                        onPress={this.handleDecreaseQuantity}>
-                        <Icon style={styles.icon}
-                            name='minus'
-                            color="#F2E1AE">
-                        </Icon>
-                    </TouchableOpacity>
-                    <Text style={styles.icon}>{this.props.item.quantity}</Text>
-                    <TouchableOpacity
-                        onPress={this.handleIncreaseQuantity}>
-                        <Icon style={styles.icon}
-                            name='plus'
-                            color="#F2E1AE">
-                        </Icon>
-                    </TouchableOpacity>
-                </View>
-                <Text style={styles.price}>{this.props.item.price * this.props.item.quantity} £</Text>
+            <View style={MainStyles.item}>
+                <Text style={MainStyles.text}>{this.props.item.name}</Text>
+                <TouchableOpacity
+                    onPress={this.handleDecreaseQuantity}>
+                    <Icon style={MainStyles.icon}
+                        name='minus'
+                        color="#F2E1AE">
+                    </Icon>
+                </TouchableOpacity>
+                <Text style={MainStyles.text}>{this.props.item.quantity}</Text>
+                <TouchableOpacity
+                    onPress={this.handleIncreaseQuantity}>
+                    <Icon style={MainStyles.icon}
+                        name='plus'
+                        color="#F2E1AE">
+                    </Icon>
+                </TouchableOpacity>
+                <Text style={MainStyles.text}>{this.props.item.price * this.props.item.quantity} £</Text>
                 <TouchableOpacity 
-                    style={styles.remove}
                     onPress={this.handleRemoveFromBasket}>
-                    <Icon style={styles.icon}
+                    <Icon style={MainStyles.icon}
                         name='remove'
                         color="#F2E1AE">
                     </Icon>
@@ -141,7 +143,6 @@ class OrderSummaryPage extends React.Component {
     }
     
     render() {
-        console.log(this.props.basket);
         return (
             <View style={MainStyles.container}>
                 <Header

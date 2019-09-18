@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MainStyles from '../Styles';
 import { connect } from 'react-redux';
@@ -58,9 +58,9 @@ class Menu extends React.Component {
                         addToBasket={this.props.addToBasket} />
         });
         return (
-            <View>
+            <ScrollView>
                 {(this.props.data.isFetching) ? <Text style={MainStyles.text}>Loading...</Text> : items}
-            </View>
+            </ScrollView>
         );
     }
 }

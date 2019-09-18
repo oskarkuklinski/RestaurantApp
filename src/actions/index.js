@@ -10,7 +10,6 @@ export function changeTable(table) {
 
 // BASKET ACTIONS
 export function addToBasket(item, basket) {
-    console.log(item, basket.items);
     let newItem = item;
     
     // increase quantity of repeating object
